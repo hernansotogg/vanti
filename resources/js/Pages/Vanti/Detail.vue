@@ -51,7 +51,7 @@ const form = useForm({
 const procesarPago = () => {
     // Verificar que tenemos datos válidos
     if (!facturaData.value || !facturaData.value.Amount) {
-        console.error('No hay datos de factura válidos');
+
         return;
     }
 
@@ -62,12 +62,6 @@ const procesarPago = () => {
 
     // Actualizar el formulario con el monto correcto
     form.total = montoTotal;
-
-    console.log('Enviando pago con datos:', {
-        total: form.total,
-        amount: facturaData.value.Amount,
-        montoTotal: montoTotal
-    });
 
     // Enviar datos del pago
     setTimeout(() => {
