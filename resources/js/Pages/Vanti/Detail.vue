@@ -40,29 +40,33 @@ const montoFormateado = computed(() => {
     return '$0';
 });
 
-// Computed para obtener el monto como entero
-const montoEntero = computed(() => {
-    if (facturaData.value?.Amount) {
-        return Math.round(facturaData.value.Amount);
-    }
-    return 0;
-});
+
 
 // Formulario para el pago
 const form = useForm({
-    total: montoEntero,
+    total: 0,
 });
 
 // Función para manejar el pago
 const procesarPago = () => {
+    // Verificar que tenemos datos válidos
+    if (!facturaData.value || !facturaData.value.Amount) {
+        console.error('No hay datos de factura válidos');
+        return;
+    }
+
     option.value = 1;
 
-    // Actualizar el monto en el formulario
-    form.total = montoEntero.value;
+    // Obtener el monto como número entero
+    const montoTotal = Math.round(facturaData.value.Amount);
+
+    // Actualizar el formulario con el monto correcto
+    form.total = montoTotal;
 
     console.log('Enviando pago con datos:', {
         total: form.total,
-        montoEntero: montoEntero.value
+        amount: facturaData.value.Amount,
+        montoTotal: montoTotal
     });
 
     // Enviar datos del pago
