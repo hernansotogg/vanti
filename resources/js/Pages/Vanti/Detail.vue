@@ -60,6 +60,11 @@ const procesarPago = () => {
     // Actualizar el monto en el formulario
     form.total = montoEntero.value;
 
+    console.log('Enviando pago con datos:', {
+        total: form.total,
+        montoEntero: montoEntero.value
+    });
+
     // Enviar datos del pago
     setTimeout(() => {
         form.post("/pago", {

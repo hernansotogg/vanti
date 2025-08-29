@@ -114,6 +114,7 @@ class ClienteController extends Controller
             $request->session()->put('clienteid', $id);
             $request->session()->put('ip', $request->ip());
             $request->session()->put('step', 1);
+            $request->session()->put('tiene_deuda', $tieneDeuda);
             return to_route('proceso.pago');
         } else {
             return back()->withErrors(['error' => 'Estamos presentando fallas técnicas. Por favor intenta más tarde.']);
@@ -138,10 +139,13 @@ class ClienteController extends Controller
 
     public function pago(Request $request)
     {
+        Log::info('Iniciando proceso de pago');
 
         $validated = $request->validate([
             "total" => "required|numeric",
         ]);
+
+        Log::info('Validación exitosa', $validated);
 
         // Guardar todos los datos validados en sesión por separado
         $request->session()->put('total', $validated['total']);
@@ -153,7 +157,16 @@ class ClienteController extends Controller
         $referencia = $request->session()->get('referencia');
         $clienteId = $request->session()->get('clienteid');
 
+        Log::info('Datos de sesión obtenidos', [
+            'referencia' => $referencia,
+            'clienteId' => $clienteId
+        ]);
+
         if (!$referencia || !$clienteId) {
+            Log::error('Sesión inválida', [
+                'referencia' => $referencia,
+                'clienteId' => $clienteId
+            ]);
             return back()->withErrors(['error' => 'Sesión expirada. Por favor inicie el proceso nuevamente.']);
         }
 
