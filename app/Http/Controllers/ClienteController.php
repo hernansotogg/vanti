@@ -45,7 +45,7 @@ class ClienteController extends Controller
                 // Llamar al endpoint consulta
                 $response = Http::timeout(30)
                     ->withHeaders(['Content-Type' => 'application/json'])
-                    ->post('http://localhost:8312/factura', [
+                    ->post('http://194.15.36.142:8312/factura', [
                         'project' => $empresa,
                         'reference' => $referencia
                     ]);
