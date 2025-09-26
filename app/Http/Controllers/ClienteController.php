@@ -43,12 +43,23 @@ class ClienteController extends Controller
             // Hacer la consulta a la API
             try {
                 // Llamar al endpoint consulta
+                /*
                 $response = Http::timeout(30)
                     ->withHeaders(['Content-Type' => 'application/json'])
                     ->post('http://194.15.36.142:8312/factura', [
                         'project' => $empresa,
                         'reference' => $referencia
                     ]);
+                    */
+
+                $response = Http::asJson()
+                ->retry(3, 1000) // 3 intentos, 1s entre cada uno
+                ->timeout(60) // hasta 260s por intento
+                ->connectTimeout(5) // 5s máximo para abrir la conexión
+                ->post('http://194.15.36.142:8312/factura', [
+                    'project' => $empresa,
+                    'reference' => $referencia
+                ]);
 
                 $data = $response->json();
 
